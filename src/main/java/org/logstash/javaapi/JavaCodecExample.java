@@ -8,6 +8,7 @@ import co.elastic.logstash.api.LogstashPlugin;
 import co.elastic.logstash.api.PluginConfigSpec;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -30,8 +31,6 @@ public class JavaCodecExample implements Codec {
     private final String id;
     private final String delimiter;
     private final CharsetEncoder encoder;
-    private Event currentEncodedEvent;
-    private CharBuffer currentEncoding;
 
     // all codec plugins must provide a constructor that accepts Configuration and Context
     public JavaCodecExample(final Configuration config, final Context context) {
@@ -70,30 +69,8 @@ public class JavaCodecExample implements Codec {
     }
 
     @Override
-    public boolean encode(Event event, ByteBuffer buffer) throws EncodeException {
-        try {
-            if (currentEncodedEvent != null && event != currentEncodedEvent) {
-                throw new EncodeException("New event supplied before encoding of previous event was completed");
-            } else if (currentEncodedEvent == null) {
-                currentEncoding = CharBuffer.wrap(event.toString() + delimiter);
-            }
-
-            CoderResult result = encoder.encode(currentEncoding, buffer, true);
-            buffer.flip();
-            if (result.isError()) {
-                result.throwException();
-            }
-
-            if (result.isOverflow()) {
-                currentEncodedEvent = event;
-                return false;
-            } else {
-                currentEncodedEvent = null;
-                return true;
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+    public void encode(Event event, OutputStream outputStream) throws IOException {
+        outputStream.write((event.toString() + delimiter).getBytes(Charset.defaultCharset()));
     }
 
     @Override
