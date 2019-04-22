@@ -1,4 +1,4 @@
-package org.logstash.javaapi;
+package org.logstashplugins;
 
 import co.elastic.logstash.api.Codec;
 import co.elastic.logstash.api.Configuration;
@@ -10,10 +10,8 @@ import co.elastic.logstash.api.PluginConfigSpec;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
