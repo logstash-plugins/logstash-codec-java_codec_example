@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +27,6 @@ public class JavaCodecExample implements Codec {
 
     private final String id;
     private final String delimiter;
-    private final CharsetEncoder encoder;
 
     // all codec plugins must provide a constructor that accepts Configuration and Context
     public JavaCodecExample(final Configuration config, final Context context) {
@@ -38,7 +36,6 @@ public class JavaCodecExample implements Codec {
     private JavaCodecExample(String delimiter) {
         this.id = UUID.randomUUID().toString();
         this.delimiter = delimiter;
-        this.encoder = Charset.defaultCharset().newEncoder();
     }
 
     @Override
