@@ -1,7 +1,22 @@
 import java.nio.file.Files
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING
 
-apply plugin: 'java'
+
+buildscript {
+    ext {
+        snakeYamlVersion = '1.33'
+        shadowGradlePluginVersion = '8.1.1'
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+  id 'com.github.johnrengelman.shadow' version '8.1.1'
+  id 'java'
+}
+
 apply from: LOGSTASH_CORE_PATH + "/../rubyUtils.gradle"
 
 // ===========================================================================
@@ -20,28 +35,17 @@ pluginInfo.pluginClass     = "JavaCodecExample"
 pluginInfo.pluginName      = "java_codec_example" // must match the @LogstashPlugin annotation in the main plugin class
 // ===========================================================================
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
-    }
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
     mavenCentral()
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
-
 shadowJar {
-    archiveClassifier = null
+    archiveClassifier.set('')
 }
 
 dependencies {
